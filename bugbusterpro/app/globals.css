@@ -1,26 +1,192 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────────────────────
+   BugBuster Pro — Design System
+   Dibuat untuk Tailwind CSS v4 (default Next.js terbaru).
+   Jika proyek memakai Tailwind v3, ganti baris @import di atas
+   dengan: @tailwind base; @tailwind components; @tailwind utilities;
+   Token warna memakai CSS variables agar portabel di kedua versi.
+   ─────────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --ink: #0a1a23;          /* navy-teal pekat — hero & permukaan gelap */
+  --ink-2: #102b35;        /* lapisan gelap kedua */
+  --teal: #0e9488;         /* primary */
+  --teal-strong: #0b7a70;  /* hover primary */
+  --teal-soft: #e6f4f2;    /* latar bertinta */
+  --aqua: #2fd4c4;         /* aksen terang */
+
+  /* Netral */
+  --paper: #f5f8f8;        /* latar halaman */
+  --surface: #ffffff;      /* kartu */
+  --surface-2: #fafcfc;
+  --line: #e6eded;         /* garis tepi */
+  --line-strong: #d4e0e0;
+  --text: #14252c;         /* teks utama */
+  --muted: #5c6f77;        /* teks sekunder */
+  --faint: #8a9aa1;        /* teks tersier */
+
+  /* Status layanan (Lifecycle) */
+  --st-pending: #b45309;   --st-pending-bg: #fef3c7;
+  --st-confirmed: #1d4ed8; --st-confirmed-bg: #dbeafe;
+  --st-scheduled: #4338ca; --st-scheduled-bg: #e0e7ff;
+  --st-progress: #0e7490;  --st-progress-bg: #cffafe;
+  --st-done: #047857;      --st-done-bg: #d1fae5;
+  --st-cancelled: #be123c; --st-cancelled-bg: #ffe4e6;
+
+  /* Bentuk & bayangan */
+  --r-sm: 9px; --r: 14px; --r-lg: 20px; --r-xl: 26px; --r-2xl: 34px;
+  --shadow-sm: 0 1px 2px rgba(10, 26, 35, 0.05), 0 1px 3px rgba(10, 26, 35, 0.04);
+  --shadow: 0 6px 20px -8px rgba(10, 26, 35, 0.12), 0 2px 6px -2px rgba(10, 26, 35, 0.05);
+  --shadow-lg: 0 24px 48px -16px rgba(10, 26, 35, 0.22);
 }
 
+/* Map token ke utilities Tailwind v4 (opsional dipakai) */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-teal: var(--teal);
+  --color-aqua: var(--aqua);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { border-color: var(--line); }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.018em;
+}
+
+/* Selection & focus ring konsisten */
+::selection { background: var(--teal); color: #fff; }
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer components {
+  /* Layout helpers */
+  .container-app { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 1.25rem; }
+
+  /* Eyebrow / data caption — tekstur mono */
+  .eyebrow {
+    font-family: var(--font-mono), monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--teal);
+  }
+  .eyebrow-muted { color: var(--faint); }
+
+  .num {
+    font-family: var(--font-display), sans-serif;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Kartu */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .card-pad { padding: 1.25rem; }
+  .card-hover { transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease; }
+  .card-hover:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: var(--line-strong); }
+
+  /* Tombol */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    font-weight: 600; font-size: 0.9375rem; line-height: 1;
+    padding: 0.75rem 1.15rem; border-radius: var(--r);
+    border: 1px solid transparent; cursor: pointer; white-space: nowrap;
+    transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.06s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-primary { background: var(--teal); color: #fff; box-shadow: 0 6px 16px -8px rgba(14, 148, 136, 0.7); }
+  .btn-primary:hover { background: var(--teal-strong); }
+  .btn-dark { background: var(--ink); color: #fff; }
+  .btn-dark:hover { background: var(--ink-2); }
+  .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--line-strong); }
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--faint); }
+  .btn-ghost { background: transparent; color: var(--muted); }
+  .btn-ghost:hover { background: var(--teal-soft); color: var(--teal-strong); }
+  .btn-danger { background: var(--st-cancelled-bg); color: var(--st-cancelled); }
+  .btn-danger:hover { background: #ffd4da; }
+  .btn-lg { padding: 0.95rem 1.4rem; font-size: 1rem; border-radius: var(--r); }
+  .btn-sm { padding: 0.55rem 0.85rem; font-size: 0.8125rem; }
+  .btn-block { width: 100%; }
+
+  /* Input & form */
+  .field-label {
+    display: block; font-size: 0.8125rem; font-weight: 600;
+    color: var(--text); margin-bottom: 0.4rem;
+  }
+  .input {
+    width: 100%; background: var(--surface); color: var(--text);
+    border: 1px solid var(--line-strong); border-radius: var(--r);
+    padding: 0.75rem 0.9rem; font-size: 0.9375rem; line-height: 1.4;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .input::placeholder { color: var(--faint); }
+  .input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(14, 148, 136, 0.14); }
+  .input-error { border-color: var(--st-cancelled); }
+  .input-error:focus { border-color: var(--st-cancelled); box-shadow: 0 0 0 3px rgba(190, 18, 60, 0.13); }
+  .input-icon { padding-left: 2.6rem; }
+  .hint-error { display: flex; align-items: center; gap: 0.35rem; color: var(--st-cancelled); font-size: 0.8125rem; margin-top: 0.4rem; }
+
+  /* Chip pilihan (jenis hama, filter) */
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.55rem 0.9rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--line-strong);
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .chip:hover { border-color: var(--teal); color: var(--teal-strong); }
+  .chip-active { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .chip-active:hover { color: #fff; }
+
+  /* Badge status */
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    padding: 0.3rem 0.65rem; border-radius: 999px;
+    font-size: 0.75rem; font-weight: 700; line-height: 1; white-space: nowrap;
+  }
+  .badge::before { content: ""; width: 0.45rem; height: 0.45rem; border-radius: 999px; background: currentColor; }
+  .badge-pending { background: var(--st-pending-bg); color: var(--st-pending); }
+  .badge-confirmed { background: var(--st-confirmed-bg); color: var(--st-confirmed); }
+  .badge-scheduled { background: var(--st-scheduled-bg); color: var(--st-scheduled); }
+  .badge-progress { background: var(--st-progress-bg); color: var(--st-progress); }
+  .badge-done { background: var(--st-done-bg); color: var(--st-done); }
+  .badge-cancelled { background: var(--st-cancelled-bg); color: var(--st-cancelled); }
+
+  /* Divider berlabel */
+  .or-divider { display: flex; align-items: center; gap: 0.9rem; color: var(--faint); font-size: 0.8125rem; }
+  .or-divider::before, .or-divider::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
