@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Star,
@@ -10,6 +12,7 @@ import {
 import { PestIcon } from "@/components/ui/pest";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { BOOKINGS } from "@/lib/mock-data";
+import { useCustomerSession } from "@/lib/customer-session";
 import {
   PEST,
   SERVICE_TYPE,
@@ -17,8 +20,10 @@ import {
 } from "@/lib/utils";
 
 export default function HistoryPage() {
-  const completed = BOOKINGS.filter((b) => b.status === "completed");
-  const cancelled = BOOKINGS.filter((b) => b.status === "cancelled");
+  const { isNew, ready } = useCustomerSession();
+  const source: typeof BOOKINGS = isNew ? [] : BOOKINGS;
+  const completed = source.filter((b) => b.status === "completed");
+  const cancelled = source.filter((b) => b.status === "cancelled");
 
   const rated = completed.filter((b) => b.feedback);
   const avgRating =
@@ -28,6 +33,8 @@ export default function HistoryPage() {
           rated.length
         ).toFixed(1)
       : "–";
+
+  if (!ready) return null;
 
   return (
     <div className="space-y-6">
@@ -53,7 +60,7 @@ export default function HistoryPage() {
         />
         <StatCard
           icon={<Clock size={20} />}
-          value={String(BOOKINGS.length)}
+          value={String(source.length)}
           label="Total pesanan"
         />
       </div>

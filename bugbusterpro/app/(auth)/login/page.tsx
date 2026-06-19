@@ -7,6 +7,7 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { AuthPanel } from "@/components/auth-panel";
 import { TextField } from "@/components/ui/field";
 import { GoogleMark, AppleMark } from "@/components/ui/brand-marks";
+import { clearNewCustomer } from "@/lib/customer-session";
 
 const DEMO_ROLES = [
   { label: "Pelanggan", href: "/dashboard", ready: true },
@@ -21,6 +22,7 @@ export default function LoginPage() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    clearNewCustomer();
     router.push("/dashboard"); // prototipe: arahkan ke area pelanggan
   };
 
@@ -31,7 +33,7 @@ export default function LoginPage() {
       <main className="flex items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm">
           <div className="lg:hidden">{/* logo kecil untuk mobile */}</div>
-          <h1 className="text-3xl font-extrabold">Selamat datang 👋</h1>
+          <h1 className="text-3xl font-extrabold">Selamat datang kembali 👋</h1>
           <p className="mt-2 text-[var(--muted)]">
             Masuk dan selesaikan masalah hama Anda dengan mudah.
           </p>
@@ -53,7 +55,7 @@ export default function LoginPage() {
                 label="Kata sandi"
                 placeholder="Masukkan kata sandi"
                 icon={<Lock size={17} />}
-                defaultValue="CJW_JSP090126"
+                defaultValue="CJW090126"
                 required
               />
               <button
@@ -105,7 +107,7 @@ export default function LoginPage() {
             <div className="mt-2.5 flex flex-wrap gap-2">
               {DEMO_ROLES.map((r) =>
                 r.ready ? (
-                  <Link key={r.label} href={r.href} className="btn btn-secondary btn-sm">
+                  <Link key={r.label} href={r.href} onClick={clearNewCustomer} className="btn btn-secondary btn-sm">
                     {r.label}
                   </Link>
                 ) : (

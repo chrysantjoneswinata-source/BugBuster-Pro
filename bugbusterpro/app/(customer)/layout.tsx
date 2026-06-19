@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/ui/logo";
-import { CURRENT_CUSTOMER } from "@/lib/mock-data";
+import { useCustomerSession } from "@/lib/customer-session";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -24,10 +24,11 @@ const NAV = [
 
 export default function CustomerLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const { customer } = useCustomerSession();
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
 
-  const initials = CURRENT_CUSTOMER.name
+  const initials = customer.name
     .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
@@ -83,7 +84,7 @@ export default function CustomerLayout({ children }: { children: ReactNode }) {
               href="/profile"
               className="grid h-10 w-10 place-items-center rounded-full font-display text-sm font-bold text-white"
               style={{ background: "var(--ink)" }}
-              title={CURRENT_CUSTOMER.name}
+              title={customer.name}
             >
               {initials}
             </Link>

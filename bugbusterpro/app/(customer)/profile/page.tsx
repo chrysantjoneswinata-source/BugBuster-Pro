@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   User,
@@ -15,9 +15,12 @@ import {
   Plus,
   Home,
   Briefcase,
+  Sparkles,
+  MapPin,
 } from "lucide-react";
 import { TextField } from "@/components/ui/field";
-import { CURRENT_CUSTOMER, BOOKINGS } from "@/lib/mock-data";
+import { BOOKINGS } from "@/lib/mock-data";
+import { useCustomerSession } from "@/lib/customer-session";
 
 const ADDRESSES = [
   {
@@ -37,16 +40,28 @@ const ADDRESSES = [
 ];
 
 export default function ProfilePage() {
+  const { customer, isNew, ready } = useCustomerSession();
   const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState({
-    name: CURRENT_CUSTOMER.name,
-    email: CURRENT_CUSTOMER.email,
-    phone: CURRENT_CUSTOMER.phone,
+    name: customer.name,
+    email: customer.email,
+    phone: customer.phone,
   });
 
-  const completed = BOOKINGS.filter((b) => b.status === "completed").length;
-  const initials = CURRENT_CUSTOMER.name
+  // Sinkronkan form ketika identitas sesi sudah diketahui
+  useEffect(() => {
+    setForm({
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+    });
+  }, [customer.name, customer.email, customer.phone]);
+
+  const completed = isNew
+    ? 0
+    : BOOKINGS.filter((b) => b.status === "completed").length;
+  const initials = customer.name
     .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
@@ -62,6 +77,8 @@ export default function ProfilePage() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
+
+  if (!ready) return null;
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -103,11 +120,22 @@ export default function ProfilePage() {
             <p className="text-xs text-white/60">Layanan selesai</p>
           </div>
           <div className="border-l border-white/15 pl-6">
-            <p className="num flex items-center gap-1 text-2xl font-extrabold">
-              <Star size={18} className="fill-[var(--aqua)] text-[var(--aqua)]" />
-              4.9
-            </p>
-            <p className="text-xs text-white/60">Pelanggan setia</p>
+            {isNew ? (
+              <>
+                <p className="flex items-center gap-1 text-2xl font-extrabold">
+                  <Sparkles size={18} className="text-[var(--aqua)]" />
+                </p>
+                <p className="text-xs text-white/60">Anggota baru</p>
+              </>
+            ) : (
+              <>
+                <p className="num flex items-center gap-1 text-2xl font-extrabold">
+                  <Star size={18} className="fill-[var(--aqua)] text-[var(--aqua)]" />
+                  4.9
+                </p>
+                <p className="text-xs text-white/60">Pelanggan setia</p>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -138,39 +166,18 @@ export default function ProfilePage() {
 
         {editing ? (
           <form onSubmit={save} className="space-y-4">
-            <TextField
-              id="name"
-              label="Nama lengkap"
-              icon={<User size={17} />}
-              value={form.name}
-              onChange={set("name")}
-            />
-            <TextField
-              id="email"
-              type="email"
-              label="Email"
-              icon={<Mail size={17} />}
-              value={form.email}
-              onChange={set("email")}
-            />
-            <TextField
-              id="phone"
-              type="tel"
-              inputMode="numeric"
-              label="Nomor telepon"
-              icon={<Phone size={17} />}
-              value={form.phone}
-              onChange={set("phone")}
-            />
+            <TextField id="name" label="Nama lengkap" icon={<User size={17} />} value={form.name} onChange={set("name")} />
+            <TextField id="email" type="email" label="Email" icon={<Mail size={17} />} value={form.email} onChange={set("email")} />
+            <TextField id="phone" type="tel" inputMode="numeric" label="Nomor telepon" icon={<Phone size={17} />} placeholder="08xx-xxxx-xxxx" value={form.phone} onChange={set("phone")} />
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => {
                   setEditing(false);
                   setForm({
-                    name: CURRENT_CUSTOMER.name,
-                    email: CURRENT_CUSTOMER.email,
-                    phone: CURRENT_CUSTOMER.phone,
+                    name: customer.name,
+                    email: customer.email,
+                    phone: customer.phone,
                   });
                 }}
                 className="btn btn-secondary"
@@ -186,7 +193,7 @@ export default function ProfilePage() {
           <dl className="space-y-4">
             <InfoRow icon={<User size={17} />} label="Nama lengkap" value={form.name} />
             <InfoRow icon={<Mail size={17} />} label="Email" value={form.email} />
-            <InfoRow icon={<Phone size={17} />} label="Nomor telepon" value={form.phone} />
+            <InfoRow icon={<Phone size={17} />} label="Nomor telepon" value={form.phone || "Belum diisi"} />
           </dl>
         )}
       </section>
@@ -199,42 +206,53 @@ export default function ProfilePage() {
             <Plus size={15} /> Tambah
           </button>
         </div>
-        <div className="space-y-3">
-          {ADDRESSES.map((a) => {
-            const Icon = a.icon;
-            return (
-              <div
-                key={a.id}
-                className="flex items-start gap-3 rounded-[var(--r)] border border-[var(--line)] p-3.5"
-              >
-                <span
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-[11px]"
-                  style={{ background: "var(--teal-soft)", color: "var(--teal)" }}
+
+        {isNew ? (
+          <div className="flex flex-col items-center rounded-[var(--r)] border border-dashed border-[var(--line-strong)] py-8 text-center">
+            <MapPin size={22} className="text-[var(--faint)]" />
+            <p className="mt-2 text-sm font-semibold">Belum ada alamat</p>
+            <p className="mt-0.5 max-w-xs text-xs text-[var(--muted)]">
+              Alamat akan tersimpan otomatis saat Anda memesan layanan pertama.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {ADDRESSES.map((a) => {
+              const Icon = a.icon;
+              return (
+                <div
+                  key={a.id}
+                  className="flex items-start gap-3 rounded-[var(--r)] border border-[var(--line)] p-3.5"
                 >
-                  <Icon size={18} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="flex items-center gap-2 font-bold">
-                    {a.label}
-                    {a.primary && (
-                      <span className="rounded-full bg-[var(--teal-soft)] px-2 py-0.5 text-[11px] font-bold text-[var(--teal-strong)]">
-                        Utama
-                      </span>
-                    )}
-                  </p>
-                  <p className="mt-0.5 text-sm text-[var(--muted)]">{a.value}</p>
+                  <span
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-[11px]"
+                    style={{ background: "var(--teal-soft)", color: "var(--teal)" }}
+                  >
+                    <Icon size={18} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="flex items-center gap-2 font-bold">
+                      {a.label}
+                      {a.primary && (
+                        <span className="rounded-full bg-[var(--teal-soft)] px-2 py-0.5 text-[11px] font-bold text-[var(--teal-strong)]">
+                          Utama
+                        </span>
+                      )}
+                    </p>
+                    <p className="mt-0.5 text-sm text-[var(--muted)]">{a.value}</p>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Ubah alamat"
+                    className="grid h-8 w-8 place-items-center rounded-full text-[var(--faint)] transition hover:bg-[var(--paper)] hover:text-[var(--teal)]"
+                  >
+                    <Pencil size={15} />
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  aria-label="Ubah alamat"
-                  className="grid h-8 w-8 place-items-center rounded-full text-[var(--faint)] transition hover:bg-[var(--paper)] hover:text-[var(--teal)]"
-                >
-                  <Pencil size={15} />
-                </button>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Keamanan */}
@@ -244,28 +262,10 @@ export default function ProfilePage() {
           Perbarui kata sandi secara berkala untuk menjaga keamanan akun.
         </p>
         <div className="space-y-4">
-          <TextField
-            id="current"
-            type="password"
-            label="Kata sandi saat ini"
-            icon={<Lock size={17} />}
-            placeholder="••••••••"
-          />
+          <TextField id="current" type="password" label="Kata sandi saat ini" icon={<Lock size={17} />} placeholder="••••••••" />
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextField
-              id="new"
-              type="password"
-              label="Kata sandi baru"
-              icon={<Lock size={17} />}
-              placeholder="Minimal 6 karakter"
-            />
-            <TextField
-              id="confirm"
-              type="password"
-              label="Ulangi kata sandi baru"
-              icon={<Lock size={17} />}
-              placeholder="Masukkan ulang"
-            />
+            <TextField id="new" type="password" label="Kata sandi baru" icon={<Lock size={17} />} placeholder="Minimal 6 karakter" />
+            <TextField id="confirm" type="password" label="Ulangi kata sandi baru" icon={<Lock size={17} />} placeholder="Masukkan ulang" />
           </div>
           <button type="button" className="btn btn-secondary">
             <ShieldCheck size={17} /> Perbarui kata sandi

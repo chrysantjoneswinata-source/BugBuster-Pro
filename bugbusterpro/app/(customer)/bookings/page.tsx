@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Plus, Inbox } from "lucide-react";
+import { Search, Plus, Inbox, PackageOpen } from "lucide-react";
 import { BookingCard } from "@/components/booking-card";
 import { BOOKINGS } from "@/lib/mock-data";
+import { useCustomerSession } from "@/lib/customer-session";
 import { PEST, SERVICE_TYPE, cn } from "@/lib/utils";
 import type { BookingStatus } from "@/lib/types";
 
@@ -22,6 +23,7 @@ const TABS: { id: Tab; label: string; match: (s: BookingStatus) => boolean }[] =
 ];
 
 export default function BookingsPage() {
+  const { isNew, ready } = useCustomerSession();
   const [tab, setTab] = useState<Tab>("all");
   const [q, setQ] = useState("");
 
@@ -49,6 +51,9 @@ export default function BookingsPage() {
       );
     });
   }, [tab, q]);
+
+  if (!ready) return null;
+  if (isNew) return <NewCustomerBookings />;
 
   return (
     <div className="space-y-6">
@@ -129,6 +134,38 @@ export default function BookingsPage() {
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ── Daftar pesanan untuk pelanggan baru ── */
+function NewCustomerBookings() {
+  return (
+    <div className="space-y-6">
+      <div>
+        <p className="eyebrow">Riwayat pemesanan</p>
+        <h1 className="mt-1 text-3xl font-extrabold">Pesanan saya</h1>
+        <p className="mt-1 text-[var(--muted)]">
+          Pantau seluruh permintaan layanan Anda di satu tempat.
+        </p>
+      </div>
+
+      <div className="card card-pad flex flex-col items-center py-16 text-center">
+        <span
+          className="grid h-16 w-16 place-items-center rounded-full"
+          style={{ background: "var(--teal-soft)", color: "var(--teal)" }}
+        >
+          <PackageOpen size={30} />
+        </span>
+        <p className="mt-4 text-lg font-bold">Belum ada pesanan</p>
+        <p className="mt-1 max-w-sm text-sm text-[var(--muted)]">
+          Anda belum membuat pesanan apa pun. Pesan layanan pertama Anda dan
+          pantau prosesnya di halaman ini.
+        </p>
+        <Link href="/book" className="btn btn-primary mt-5">
+          <Plus size={17} /> Pesan layanan pertama
+        </Link>
+      </div>
     </div>
   );
 }

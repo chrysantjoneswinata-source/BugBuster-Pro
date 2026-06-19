@@ -7,6 +7,7 @@ import { User, Mail, Phone, Lock, Eye, EyeOff } from "lucide-react";
 import { AuthPanel } from "@/components/auth-panel";
 import { TextField } from "@/components/ui/field";
 import { GoogleMark, AppleMark } from "@/components/ui/brand-marks";
+import { markNewCustomer } from "@/lib/customer-session";
 
 interface FormState {
   name: string;
@@ -77,7 +78,10 @@ export default function RegisterPage() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) router.push("/dashboard");
+    if (validate()) {
+      markNewCustomer({ name: form.name.trim(), email: form.email.trim() });
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -95,7 +99,7 @@ export default function RegisterPage() {
             <TextField
               id="name"
               label="Nama lengkap"
-              placeholder="Contoh: Chrysant Jones Winata"
+              placeholder="Chrysant Jones Winata"
               icon={<User size={17} />}
               value={form.name}
               onChange={set("name")}
@@ -105,7 +109,7 @@ export default function RegisterPage() {
               id="email"
               type="email"
               label="Email"
-              placeholder="contoh@gmail.com"
+              placeholder="nama@gmail.com"
               icon={<Mail size={17} />}
               value={form.email}
               onChange={set("email")}
@@ -145,8 +149,8 @@ export default function RegisterPage() {
             <TextField
               id="confirm"
               type={show ? "text" : "password"}
-              label="Konfirmasi kata sandi"
-              placeholder="Konfirmasi kata sandi"
+              label="Ulangi kata sandi"
+              placeholder="Masukkan ulang kata sandi"
               icon={<Lock size={17} />}
               value={form.confirm}
               onChange={set("confirm")}
