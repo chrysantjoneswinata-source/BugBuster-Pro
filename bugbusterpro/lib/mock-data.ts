@@ -133,11 +133,7 @@ export const BOOKINGS: Booking[] = [
       materials: ["Insektisida residual 1 L", "Perlakuan uap panas"],
       photos: 3,
     },
-    feedback: {
-      rating: 4,
-      comment: "Hasil bagus, hama hilang. Hanya saja jadwal sempat mundur 30 menit.",
-      createdAt: "2024-09-15T19:00:00",
-    },
+    
   },
   {
     id: "bk-0975",
