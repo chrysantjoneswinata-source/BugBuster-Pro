@@ -12,22 +12,14 @@ export function AuthPanel() {
   return (
     <aside
       className="relative hidden flex-col justify-between overflow-hidden p-10 lg:flex"
-      style={{ background: "var(--ink)" }}
+      style={{
+        backgroundColor: "var(--ink)",
+        backgroundImage:
+          "linear-gradient(160deg, rgba(13,42,74,0.82) 0%, rgba(15,66,68,0.84) 52%, rgba(19,78,58,0.88) 100%), url('/auth.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-25 blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--teal) 0%, transparent 70%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(var(--aqua) 1px, transparent 1px), linear-gradient(90deg, var(--aqua) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
 
       <div className="relative flex items-center justify-between">
         <Logo variant="light" />
@@ -58,7 +50,7 @@ export function AuthPanel() {
         </ul>
       </div>
 
-      <p className="relative text-xs text-white/40">
+      <p className="relative text-xs text-white/60">
         © 2024 BugBuster Pro · Service Management Module
       </p>
     </aside>

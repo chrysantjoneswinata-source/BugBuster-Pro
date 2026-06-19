@@ -33,7 +33,7 @@ export default function LoginPage() {
       <main className="flex items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm">
           <div className="lg:hidden">{/* logo kecil untuk mobile */}</div>
-          <h1 className="text-3xl font-extrabold">Selamat datang kembali 👋</h1>
+          <h1 className="text-3xl font-extrabold">Selamat datang 👋</h1>
           <p className="mt-2 text-[var(--muted)]">
             Masuk dan selesaikan masalah hama Anda dengan mudah.
           </p>
@@ -55,7 +55,7 @@ export default function LoginPage() {
                 label="Kata sandi"
                 placeholder="Masukkan kata sandi"
                 icon={<Lock size={17} />}
-                defaultValue="CJW090126"
+                defaultValue="CJW_JSP_090126"
                 required
               />
               <button

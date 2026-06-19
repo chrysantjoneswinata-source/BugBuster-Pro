@@ -9,13 +9,14 @@
    ─────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Brand */
-  --ink: #0a1a23;          /* navy-teal pekat — hero & permukaan gelap */
-  --ink-2: #102b35;        /* lapisan gelap kedua */
-  --teal: #0e9488;         /* primary */
-  --teal-strong: #0b7a70;  /* hover primary */
-  --teal-soft: #e6f4f2;    /* latar bertinta */
-  --aqua: #2fd4c4;         /* aksen terang */
+  /* Brand — palet navy + hijau (mengikuti referensi Bugblock).
+     Nama variabel tetap --teal/--aqua agar perubahan cukup di file ini. */
+  --ink: #162a4d;          /* navy tua — hero, footer, ajakan (aksen gelap) */
+  --ink-2: #1f3a63;        /* lapisan navy kedua */
+  --teal: #4f9c2f;         /* primary (hijau daun) */
+  --teal-strong: #41842a;  /* hover primary (hijau tua) */
+  --teal-soft: #e9f4dd;    /* latar bertinta (hijau muda) */
+  --aqua: #74c244;         /* aksen terang (hijau cerah) */
 
   /* Netral */
   --paper: #f5f8f8;        /* latar halaman */
