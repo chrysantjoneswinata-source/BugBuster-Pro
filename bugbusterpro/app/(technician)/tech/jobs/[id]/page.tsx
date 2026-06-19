@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = 'force-dynamic';
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -449,11 +449,4 @@ function ListInput({
     </div>
   );
 }
-export async function generateStaticParams() {
-  // Fetch semua job IDs dari API/database
-  const jobs = await fetch('https://your-api.com/jobs').then(r => r.json());
-  
-  return jobs.map((job: any) => ({
-    id: job.id.toString(),
-  }));
-}
+
