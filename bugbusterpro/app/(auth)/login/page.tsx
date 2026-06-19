@@ -12,7 +12,7 @@ const DEMO_ROLES = [
   { label: "Pelanggan", href: "/dashboard", ready: true },
   { label: "Admin", href: "/admin", ready: true },
   { label: "Teknisi", href: "/tech", ready: true },
-  { label: "Manager", href: "/manager", ready: false },
+  { label: "Manager", href: "/manager", ready: true },
 ];
 
 export default function LoginPage() {
