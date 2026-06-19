@@ -11,7 +11,7 @@ import { GoogleMark, AppleMark } from "@/components/ui/brand-marks";
 const DEMO_ROLES = [
   { label: "Pelanggan", href: "/dashboard", ready: true },
   { label: "Admin", href: "/admin", ready: true },
-  { label: "Teknisi", href: "/tech", ready: false },
+  { label: "Teknisi", href: "/tech", ready: true },
   { label: "Manager", href: "/manager", ready: false },
 ];
 
