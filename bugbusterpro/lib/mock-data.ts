@@ -3,8 +3,8 @@ import type { Booking, Customer, Technician } from "./types";
 // Pengguna pelanggan yang sedang login (prototipe)
 export const CURRENT_CUSTOMER: Customer = {
   id: "c-001",
-  name: "Jody Sandy Prawira",
-  email: "jody.sandy@email.com",
+  name: "Chrysant Jones Winata",
+  email: "chrysantjonesw@gmail.com",
   phone: "0812-3456-7890",
   address: "Pogung Baru No. 21, Sleman, DI Yogyakarta 55284",
 };

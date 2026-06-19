@@ -33,6 +33,8 @@ export default function RegisterPage() {
     confirm: "",
   });
   const [errors, setErrors] = useState<Errors>({});
+  const [agree, setAgree] = useState(false);
+  const [agreeError, setAgreeError] = useState<string>();
 
   const set =
     (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +65,14 @@ export default function RegisterPage() {
       next.confirm = "Konfirmasi tidak cocok dengan kata sandi.";
 
     setErrors(next);
-    return Object.keys(next).length === 0;
+
+    setAgreeError(
+      agree
+        ? undefined
+        : "Anda harus menyetujui Syarat & Ketentuan dan Kebijakan Privasi terlebih dahulu."
+    );
+
+    return Object.keys(next).length === 0 && agree;
   };
 
   const submit = (e: React.FormEvent) => {
@@ -86,7 +95,7 @@ export default function RegisterPage() {
             <TextField
               id="name"
               label="Nama lengkap"
-              placeholder="mis. Jody Sandy Prawira"
+              placeholder="Contoh: Chrysant Jones Winata"
               icon={<User size={17} />}
               value={form.name}
               onChange={set("name")}
@@ -96,7 +105,7 @@ export default function RegisterPage() {
               id="email"
               type="email"
               label="Email"
-              placeholder="nama@email.com"
+              placeholder="contoh@gmail.com"
               icon={<Mail size={17} />}
               value={form.email}
               onChange={set("email")}
@@ -136,8 +145,8 @@ export default function RegisterPage() {
             <TextField
               id="confirm"
               type={show ? "text" : "password"}
-              label="Ulangi kata sandi"
-              placeholder="Masukkan ulang kata sandi"
+              label="Konfirmasi kata sandi"
+              placeholder="Konfirmasi kata sandi"
               icon={<Lock size={17} />}
               value={form.confirm}
               onChange={set("confirm")}
@@ -147,7 +156,11 @@ export default function RegisterPage() {
             <label className="flex items-start gap-2.5 pt-1 text-sm text-[var(--muted)]">
               <input
                 type="checkbox"
-                required
+                checked={agree}
+                onChange={(e) => {
+                  setAgree(e.target.checked);
+                  setAgreeError(undefined);
+                }}
                 className="mt-0.5 h-4 w-4 rounded accent-[var(--teal)]"
               />
               <span>
@@ -162,6 +175,8 @@ export default function RegisterPage() {
                 BugBuster Pro.
               </span>
             </label>
+
+            {agreeError && <p className="hint-error">{agreeError}</p>}
 
             <button type="submit" className="btn btn-primary btn-lg btn-block">
               Daftar sekarang

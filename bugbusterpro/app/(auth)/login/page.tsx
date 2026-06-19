@@ -10,7 +10,7 @@ import { GoogleMark, AppleMark } from "@/components/ui/brand-marks";
 
 const DEMO_ROLES = [
   { label: "Pelanggan", href: "/dashboard", ready: true },
-  { label: "Admin", href: "/admin", ready: false },
+  { label: "Admin", href: "/admin", ready: true },
   { label: "Teknisi", href: "/tech", ready: false },
   { label: "Manager", href: "/manager", ready: false },
 ];
@@ -31,7 +31,7 @@ export default function LoginPage() {
       <main className="flex items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm">
           <div className="lg:hidden">{/* logo kecil untuk mobile */}</div>
-          <h1 className="text-3xl font-extrabold">Selamat datang kembali 👋</h1>
+          <h1 className="text-3xl font-extrabold">Selamat datang 👋</h1>
           <p className="mt-2 text-[var(--muted)]">
             Masuk dan selesaikan masalah hama Anda dengan mudah.
           </p>
@@ -43,7 +43,7 @@ export default function LoginPage() {
               label="Email"
               placeholder="nama@email.com"
               icon={<Mail size={17} />}
-              defaultValue="jody.sandy@email.com"
+              defaultValue="chrysantjonesw@gmail.com"
               required
             />
             <div>
@@ -53,7 +53,7 @@ export default function LoginPage() {
                 label="Kata sandi"
                 placeholder="Masukkan kata sandi"
                 icon={<Lock size={17} />}
-                defaultValue="password"
+                defaultValue="CJW_JSP090126"
                 required
               />
               <button

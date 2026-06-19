@@ -50,8 +50,7 @@ export default function DashboardPage() {
       {/* Sapaan */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">Halo, selamat datang</p>
-          <h1 className="mt-1 text-3xl font-extrabold">Hai, {firstName} 👋</h1>
+          <h1 className="mt-1 text-3xl font-extrabold">Hai {firstName} 👋</h1>
           <p className="mt-1 text-[var(--muted)]">
             Berikut ringkasan layanan pembasmian hama Anda.
           </p>
